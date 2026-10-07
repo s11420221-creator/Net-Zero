@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企業淨零策略模擬大賽 | Net-Zero Business Simulation Competition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', '"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        forest: '#09261c',
+                        leaf: '#10b981',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(209, 250, 229, 0.6);
+        }
+        .glass-dark {
+            background: rgba(9, 38, 28, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- Header / Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-emerald-100/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-600/20 group-hover:scale-105 transition-transform duration-300">
+                    <i class="fa-solid fa-leaf text-xl"></i>
+                </div>
+                <div>
+                    <span class="block text-xl font-black text-forest tracking-tight leading-none">Net-Zero</span>
+                    <span class="text-xs text-emerald-600 font-bold tracking-wider" data-zh="企業淨零策略模擬大賽" data-en="Business Simulation">企業淨零策略模擬大賽</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-7 font-semibold text-sm text-slate-600">
+                <a href="#purpose" class="hover:text-emerald-600 transition-colors" data-zh="活動宗旨" data-en="Purpose">活動宗旨</a>
+                <a href="#eligibility" class="hover:text-emerald-600 transition-colors" data-zh="參賽資格" data-en="Eligibility">參賽資格</a>
+                <a href="#format" class="hover:text-emerald-600 transition-colors" data-zh="競賽機制與獎金" data-en="Format & Prizes">競賽機制與獎金</a>
+                <a href="#timeline" class="hover:text-emerald-600 transition-colors" data-zh="模擬流程" data-en="Simulation">模擬流程</a>
+                <a href="#schedule" class="hover:text-emerald-600 transition-colors" data-zh="賽程時間" data-en="Schedule">賽程時間</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <!-- Language Toggle Button -->
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="px-3 py-1.5 rounded-full border border-slate-200 hover:border-emerald-500 bg-slate-100 hover:bg-emerald-50 text-xs font-bold text-slate-700 hover:text-emerald-700 transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe text-emerald-600"></i>
+                    <span id="langLabel">EN / 英文</span>
+                </button>
+
+                <a href="#schedule" class="hidden sm:inline-flex bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-full shadow-md shadow-emerald-600/20 hover:shadow-emerald-600/40 transition-all text-sm items-center gap-2">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                    <span data-zh="立即報名 / 賽程" data-en="Schedule & Apply">立即報名 / 賽程</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-emerald-50 via-white to-slate-50">
+        <!-- Ambient Glowing Background Elements -->
+        <div class="absolute top-12 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-emerald-200/30 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        <div class="absolute top-1/3 right-10 w-96 h-96 bg-teal-200/20 rounded-full blur-2xl -z-10 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Hero Text Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100/90 border border-emerald-200 text-emerald-900 font-bold text-xs sm:text-sm tracking-wide">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        <i class="fa-solid fa-graduation-cap text-emerald-700"></i>
+                        <span data-zh="管理學院主辦 • 永續商業策略沙盤實戰" data-en="Hosted by College of Management">管理學院主辦 • 永續商業策略沙盤實戰</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-forest leading-[1.18] tracking-tight">
+                        <span data-zh="企業淨零策略模擬大賽" data-en="Net-Zero Business Simulation">企業淨零策略模擬大賽</span><br/>
+                        <span class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent" data-zh="實戰決策 ✕ 永續轉型" data-en="Strategic Decision & Sustainability">實戰決策 ✕ 永續轉型</span>
+                    </h1>
+
+                    <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal" data-zh="面對全球淨零碳排與永續發展趨勢，本競賽採用 Net-Zero 企業模擬軟體，進行為期 7 期之減碳策略與營運決策，培育兼具產業實務能力與永續視野之專業人才。" data-en="In response to global net-zero trends, teams use Net-Zero Business Simulation Software for a 7-period simulation of carbon-reduction strategies and practical business decisions.">
+                        面對全球淨零碳排與永續發展趨勢，本競賽採用 Net-Zero 企業模擬軟體，進行為期 7 期之減碳策略與營運決策，培育兼具產業實務能力與永續視野之專業人才。
+                    </p>
+
+                    <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#format" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base shadow-lg shadow-emerald-600/30 hover:scale-[1.02] transition-all text-center flex items-center justify-center gap-2">
+                            <span data-zh="競賽獎勵與機制" data-en="View Prizes & Format">競賽獎勵與機制</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </a>
+                        <a href="#schedule" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 font-bold text-base border border-slate-200 shadow-sm transition-all text-center flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-calendar-check text-emerald-600"></i>
+                            <span data-zh="查看初決賽時間" data-en="View Schedule">查看初決賽時間</span>
+                        </a>
+                    </div>
+
+                    <!-- Highlight Badges -->
+                    <div class="pt-8 border-t border-slate-200/80 grid grid-cols-3 gap-4 text-center lg:text-left">
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-black text-forest">7 期</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium" data-zh="經營模擬與減碳決策" data-en="7-Period Simulation">經營模擬與減碳決策</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-black text-emerald-600">Top 20%</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium" data-zh="晉級隊伍獲 $5,000" data-en="Advance Reward">晉級隊伍獲 $5,000</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-black text-forest">NT$15,000</div>
+                            <div class="text-xs sm:text-sm text-slate-500 font-medium" data-zh="決賽第一名最高獎金" data-en="First Prize">決賽第一名最高獎金</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Graphic Visual Card -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none glass-dark rounded-3xl p-8 text-white shadow-2xl overflow-hidden">
+                        <!-- Decorative glow -->
+                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-emerald-500/20 rounded-full blur-2xl"></div>
+
+                        <div class="flex items-center justify-between pb-6 border-b border-white/10 mb-6">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Simulation Software</span>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full bg-white/10 text-xs font-mono text-emerald-200">Net-Zero Platform</span>
+                        </div>
+
+                        <!-- Card Content Summary -->
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-trophy"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-300" data-zh="決賽首獎" data-en="1st Place">決賽首獎</div>
+                                        <div class="text-base font-extrabold text-white">NT$ 15,000 / 隊</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold px-2.5 py-1 bg-amber-500/20 text-amber-300 rounded-lg">冠軍</span>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-slate-300/20 text-slate-300 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-award"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-300" data-zh="決賽亞軍" data-en="2nd Place">決賽亞軍</div>
+                                        <div class="text-base font-extrabold text-white">NT$ 12,000 / 隊</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold px-2.5 py-1 bg-slate-300/20 text-slate-200 rounded-lg">亞軍</span>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-800/30 text-amber-500 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-medal"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-300" data-zh="決賽季軍" data-en="3rd Place">決賽季軍</div>
+                                        <div class="text-base font-extrabold text-white">NT$ 9,000 / 隊</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold px-2.5 py-1 bg-amber-800/30 text-amber-400 rounded-lg">季軍</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-white/10 text-xs text-emerald-200/90 leading-relaxed flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                            <span data-zh="總績效前 20% 進決賽，每隊加碼頒發 5,000 元晉級獎金！" data-en="Top 20% advance & receive NT$5,000 per team!">總績效前 20% 進決賽，每隊加碼頒發 5,000 元晉級獎金！</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Purpose Section -->
+    <section id="purpose" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">Purpose</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-forest" data-zh="活動宗旨" data-en="Competition Purpose">活動宗旨</h2>
+                <div class="w-12 h-1 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl hover:shadow-xl transition-all duration-300 border border-slate-100 group">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-earth-americas"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-forest mb-3" data-zh="因應供應鏈轉型挑戰" data-en="Supply Chain Transformation">因應供應鏈轉型挑戰</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-zh="面對全球淨零碳排與永續發展趨勢，企業供應鏈正面臨全新的轉型需求與碳減排挑戰。" data-en="In response to global net-zero emissions and sustainable development trends, supply chains face new transformation challenges.">
+                        面對全球淨零碳排與永續發展趨勢，企業供應鏈正面臨全新的轉型需求與碳減排挑戰。
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl hover:shadow-xl transition-all duration-300 border border-slate-100 group">
+                    <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-forest mb-3" data-zh="軟體實務模擬與決策" data-en="Business Simulation">軟體實務模擬與決策</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-zh="透過 Net-Zero 企業模擬軟體，進行七期實務決策，模擬碳減排策略對企業營運績效之綜合影響。" data-en="Utilizes Net-Zero Business Simulation Software to complete seven periods of carbon reduction and strategy simulation.">
+                        透過 Net-Zero 企業模擬軟體，進行七期實務決策，模擬碳減排策略對企業營運績效之綜合影響。
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl hover:shadow-xl transition-all duration-300 border border-slate-100 group">
+                    <div class="w-14 h-14 bg-cyan-100 text-cyan-700 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-forest mb-3" data-zh="培育永續跨領域人才" data-en="Cultivate ESG Talent">培育永續跨領域人才</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-zh="旨在培育具備產業實務能力、財務視野與永續思維之專業人才，為企業淨零轉型奠定基石。" data-en="Aims to cultivate professionals with industry-relevant skills and a sustainability-oriented perspective.">
+                        旨在培育具備產業實務能力、財務視野與永續思維之專業人才，為企業淨零轉型奠定基石。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Eligibility Section -->
+    <section id="eligibility" class="py-20 bg-slate-100/80 border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-dark rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-5 space-y-4 border-b lg:border-b-0 lg:border-r border-emerald-800/60 pb-6 lg:pb-0 lg:pr-8">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest block">Eligibility</span>
+                        <h2 class="text-3xl font-black" data-zh="參賽資格與組隊規定" data-en="Eligibility & Team Size">參賽資格與組隊規定</h2>
+                        <p class="text-slate-300 text-sm leading-relaxed" data-zh="本競賽歡迎管理學院大學部及研究所學生組隊挑戰，發揮跨系所團隊合作優勢！" data-en="Students from all departments and institutes within the College of Management are eligible to participate.">
+                            本競賽歡迎管理學院大學部及研究所學生組隊挑戰，發揮跨系所團隊合作優勢！
+                        </p>
+                    </div>
+
+                    <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-lg font-bold mb-2">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <h3 class="font-bold text-emerald-300 text-base" data-zh="參賽對象" data-en="Eligible Participants">參賽對象</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed" data-zh="管理學院各系所學生（包含大學部及研究所學生）皆可組隊參賽。" data-en="Students from all departments within the College of Management.">
+                                管理學院各系所學生（包含大學部及研究所學生）皆可組隊參賽。
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center text-lg font-bold mb-2">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <h3 class="font-bold text-teal-300 text-base" data-zh="隊伍人數上限" data-en="Team Size Limit">隊伍人數上限</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed" data-zh="每隊以 6 人為上限（自由跨系組隊）。" data-en="Each team may have up to 6 members.">
+                                每隊以 <strong class="text-white underline decoration-emerald-400">6 人為上限</strong>（自由跨系組隊）。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive 7-Period Simulation Visual Timeline -->
+    <section id="timeline" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">Simulation Experience</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-forest" data-zh="為期七期減碳策略模擬" data-en="7-Period Simulation Process">為期七期減碳策略模擬</h2>
+                <p class="text-slate-500 text-sm mt-2" data-zh="點選下方期數，探索參賽隊伍在 Net-Zero 軟體中的決策範疇" data-en="Explore team decision dimensions in the Net-Zero simulation">點選下方期數，探索參賽隊伍在 Net-Zero 軟體中的決策範疇</p>
+                <div class="w-12 h-1 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Interactive Period Tabs -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mb-10" id="periodTabs">
+                <button onclick="setPeriod(1)" id="pTab1" class="px-4 py-2 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-md">Period 1: 盤查</button>
+                <button onclick="setPeriod(2)" id="pTab2" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50">Period 2: 能源</button>
+                <button onclick="setPeriod(3)" id="pTab3" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50">Period 3: 減碳</button>
+                <button onclick="setPeriod(4)" id="pTab4" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50">Period 4: 供應鏈</button>
+                <button onclick="setPeriod(5)" id="pTab5" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50">Period 5: 碳抵換</button>
+                <button onclick="setPeriod(6)" id="pTab6" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50">Period 6: 財務平衡</button>
+                <button onclick="setPeriod(7)" id="pTab7" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50">Period 7: 總評</button>
+            </div>
+
+            <!-- Dynamic Card Display -->
+            <div class="max-w-3xl mx-auto glass-card p-8 rounded-3xl border border-emerald-200/80 shadow-md transition-all duration-300" id="periodCard">
+                <div class="flex items-center gap-4 mb-4">
+                    <span id="periodBadge" class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">第一期 Period 1</span>
+                    <h3 id="periodTitle" class="text-xl font-bold text-forest">範疇一與範疇二溫室氣體盤查</h3>
+                </div>
+                <p id="periodDesc" class="text-slate-600 text-sm leading-relaxed mb-6">
+                    收集營運數據，檢視範疇一（直接排放）與範疇二（能源間接排放）碳足跡，建立企業基準碳排放模型。
+                </p>
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60">
+                        <span class="font-bold text-emerald-700 block mb-1">關鍵指標 (KPI)</span>
+                        <span id="periodKpi" class="text-slate-600">組織碳足跡基準值 ($tCO_2e$)</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60">
+                        <span class="font-bold text-emerald-700 block mb-1">決策挑戰</span>
+                        <span id="periodChallenge" class="text-slate-600">設備監測成本與盤查精準度權衡</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Format & Prizes Section -->
+    <section id="format" class="py-20 bg-slate-50 border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">Rules & Awards</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-forest" data-zh="競賽機制與獎金規劃" data-en="Format & Prize Breakdown">競賽機制與獎牌規劃</h2>
+                <div class="w-12 h-1 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Preliminary Card -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/90 shadow-sm hover:shadow-md transition-all">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs" data-zh="第一階段" data-en="Stage 1">第一階段</span>
+                        <span class="text-xs font-bold text-emerald-600"><i class="fa-solid fa-laptop mr-1"></i> 現場線上模擬</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-forest mb-3" data-zh="初賽 Preliminary Round" data-en="Preliminary Round">初賽 Preliminary Round</h3>
+                    <p class="text-slate-600 text-sm mb-6 leading-relaxed" data-zh="參賽隊伍使用 Net-Zero 企業模擬軟體進行七期經營與減碳決策。評比依各隊整體經營績效進行排序。" data-en="Teams complete a 7-period simulation. Top 20% advance based on overall business performance.">
+                        參賽隊伍使用 Net-Zero 企業模擬軟體進行七期經營與減碳決策。評比依各隊整體經營績效進行排序。
+                    </p>
+
+                    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-emerald-800 font-semibold" data-zh="晉級門檻 & 晉級獎金" data-en="Advancement Reward">晉級門檻 & 晉級獎金</div>
+                            <div class="text-base font-extrabold text-emerald-900" data-zh="總績效前 20% 隊伍晉級" data-en="Top 20% Teams Advance">總績效前 20% 隊伍晉級</div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xl font-black text-emerald-700">NT$ 5,000</span>
+                            <span class="block text-xs text-emerald-600">/ 隊</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Round Card -->
+                <div class="bg-gradient-to-br from-forest to-slate-900 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs" data-zh="第二階段" data-en="Stage 2">第二階段</span>
+                        <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-trophy mr-1"></i> 決賽爭霸</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3" data-zh="決賽 Final Round" data-en="Final Round">決賽 Final Round</h3>
+                    <p class="text-slate-300 text-sm mb-6 leading-relaxed" data-zh="晉級隊伍於決賽階段進行最終減碳經營績效比拼，取前三名頒發總額最高獎金：" data-en="Top three teams with the best carbon-reduction business performance will win:">
+                        晉級隊伍於決賽階段進行最終減碳經營績效比拼，取前三名頒發總額最高獎金：
+                    </p>
+
+                    <div class="space-y-3">
+                        <div class="p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-between">
+                            <span class="text-sm font-bold text-amber-300 flex items-center gap-2">
+                                <i class="fa-solid fa-crown text-amber-400"></i>
+                                <span data-zh="第一名 1st Place" data-en="First Place">第一名 1st Place</span>
+                            </span>
+                            <span class="text-lg font-black text-amber-300">NT$ 15,000 <span class="text-xs text-slate-300 font-normal">/ 隊</span></span>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-slate-300/15 border border-slate-300/30 flex items-center justify-between">
+                            <span class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-medal text-slate-300"></i>
+                                <span data-zh="第二名 2nd Place" data-en="Second Place">第二名 2nd Place</span>
+                            </span>
+                            <span class="text-lg font-black text-slate-200">NT$ 12,000 <span class="text-xs text-slate-300 font-normal">/ 隊</span></span>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-amber-800/20 border border-amber-700/30 flex items-center justify-between">
+                            <span class="text-sm font-bold text-amber-400 flex items-center gap-2">
+                                <i class="fa-solid fa-award text-amber-500"></i>
+                                <span data-zh="第三名 3rd Place" data-en="Third Place">第三名 3rd Place</span>
+                            </span>
+                            <span class="text-lg font-black text-amber-400">NT$ 9,000 <span class="text-xs text-slate-300 font-normal">/ 隊</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">Schedule & Location</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-forest" data-zh="賽程時間與地點" data-en="Competition Schedule">賽程時間與地點</h2>
+                <p class="text-slate-500 text-sm mt-2" data-zh="初賽共三場次，採現場線上方式進行，地點如下：" data-en="Preliminary round offers three sessions on-site online.">初賽共三場次，採現場線上方式進行，地點如下：</p>
+                <div class="w-12 h-1 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Preliminary Sessions -->
+                <div class="lg:col-span-7 space-y-4">
+                    <h3 class="text-xl font-bold text-forest mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days text-emerald-600"></i>
+                        <span data-zh="初賽場次（擇一參加）" data-en="Preliminary Sessions">初賽場次（擇一參加）</span>
+                    </h3>
+
+                    <!-- Session 1 Card -->
+                    <div class="glass-card p-5 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-emerald-500 transition-all">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded bg-emerald-600 text-white font-bold text-xs">場次 1</span>
+                                <span class="text-base font-extrabold text-forest">10/27 (二)</span>
+                            </div>
+                            <div class="text-xs text-slate-500 flex items-center gap-3">
+                                <span><i class="fa-regular fa-clock text-emerald-600 mr-1"></i> 14:10 - 17:10</span>
+                                <span><i class="fa-solid fa-location-dot text-emerald-600 mr-1"></i> M132 教室</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCalendar('10/27 初賽', '10/27(二) 14:10-17:10', 'M132')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition-colors self-start sm:self-center flex items-center gap-1.5">
+                            <i class="fa-regular fa-calendar-plus"></i> 加到 Google 日曆
+                        </button>
+                    </div>
+
+                    <!-- Session 2 Card -->
+                    <div class="glass-card p-5 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-emerald-500 transition-all">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded bg-emerald-600 text-white font-bold text-xs">場次 2</span>
+                                <span class="text-base font-extrabold text-forest">10/28 (三)</span>
+                            </div>
+                            <div class="text-xs text-slate-500 flex items-center gap-3">
+                                <span><i class="fa-regular fa-clock text-emerald-600 mr-1"></i> 09:10 - 12:10</span>
+                                <span><i class="fa-solid fa-location-dot text-emerald-600 mr-1"></i> M243 教室</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCalendar('10/28 初賽', '10/28(三) 09:10-12:10', 'M243')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition-colors self-start sm:self-center flex items-center gap-1.5">
+                            <i class="fa-regular fa-calendar-plus"></i> 加到 Google 日曆
+                        </button>
+                    </div>
+
+                    <!-- Session 3 Card -->
+                    <div class="glass-card p-5 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-emerald-500 transition-all">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded bg-emerald-600 text-white font-bold text-xs">場次 3</span>
+                                <span class="text-base font-extrabold text-forest">11/05 (四)</span>
+                            </div>
+                            <div class="text-xs text-slate-500 flex items-center gap-3">
+                                <span><i class="fa-regular fa-clock text-emerald-600 mr-1"></i> 13:10 - 16:10</span>
+                                <span><i class="fa-solid fa-location-dot text-emerald-600 mr-1"></i> M145 教室</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCalendar('11/05 初賽', '11/05(四) 13:10-16:10', 'M145')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition-colors self-start sm:self-center flex items-center gap-1.5">
+                            <i class="fa-regular fa-calendar-plus"></i> 加到 Google 日曆
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Final Session -->
+                <div class="lg:col-span-5 glass-dark p-8 rounded-3xl text-white flex flex-col justify-between shadow-xl">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs mb-4 inline-block" data-zh="總決賽時間" data-en="Final Round Schedule">總決賽時間</span>
+                        <h3 class="text-2xl font-bold mb-4" data-zh="決賽 Final Round" data-en="Final Round Schedule">決賽 Final Round</h3>
+
+                        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-3 mb-6">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-slate-400" data-zh="日期" data-en="Date">日期</span>
+                                <span class="text-xl font-extrabold text-amber-300">11/10 (二)</span>
+                            </div>
+                            <div class="flex items-center justify-between pt-2 border-t border-white/10">
+                                <span class="text-xs text-slate-400" data-zh="時間" data-en="Time">時間</span>
+                                <span class="text-base font-bold text-emerald-300">12:10 - 14:10</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button onclick="addToCalendar('Net-Zero 總決賽', '11/10(二) 12:10-14:10', '管理學院')" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-star"></i> 將決賽時間加入日曆
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">FAQ</span>
+                <h2 class="text-3xl font-black text-forest" data-zh="常見問題" data-en="Frequently Asked Questions">常見問題</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <button onclick="toggleFaq(1)" class="w-full text-left font-bold text-forest flex items-center justify-between">
+                        <span data-zh="1. 非管理學院的學生可以組隊參加嗎？" data-en="1. Can non-College of Management students participate?">1. 非管理學院的學生可以組隊參加嗎？</span>
+                        <i id="faqIcon1" class="fa-solid fa-chevron-down text-emerald-600"></i>
+                    </button>
+                    <p id="faqAns1" class="hidden text-xs text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed" data-zh="本競賽主要對象為管理學院各系所學生，隊伍中只要包含管理學院學生即可組隊，歡迎跨系交流。" data-en="Students from all departments within the College of Management are eligible.">
+                        本競賽主要對象為管理學院各系所學生，隊伍中只要包含管理學院學生即可組隊，歡迎跨系交流。
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <button onclick="toggleFaq(2)" class="w-full text-left font-bold text-forest flex items-center justify-between">
+                        <span data-zh="2. 競賽需要預先安裝軟體嗎？" data-en="2. Do we need to install software beforehand?">2. 競賽需要預先安裝軟體嗎？</span>
+                        <i id="faqIcon2" class="fa-solid fa-chevron-down text-emerald-600"></i>
+                    </button>
+                    <p id="faqAns2" class="hidden text-xs text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed" data-zh="競賽採現場線上方式進行，使用網頁端 Net-Zero 企業模擬平台，現場會提供操作指引與帳號。 Focus on practical decisions!" data-en="The competition takes place on-site online using web-based simulation tools.">
+                        競賽採現場線上方式進行，使用網頁端 Net-Zero 企業模擬平台，現場會提供操作指引與帳號。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-forest text-slate-400 py-12 border-t border-emerald-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold text-base">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <div>
+                        <span class="block text-white font-extrabold text-base">企業淨零策略模擬大賽</span>
+                        <span class="text-xs text-slate-400">Net-Zero Business Simulation Competition</span>
+                    </div>
+                </div>
+
+                <div class="text-xs text-center md:text-right space-y-1">
+                    <p class="text-slate-300"><strong class="text-white" data-zh="主辦單位：" data-en="Host: ">主辦單位：</strong>管理學院 (College of Management)</p>
+                    <p class="text-slate-500">© Net-Zero Business Simulation. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Language Toggle Logic (ZH / EN)
+        let currentLang = 'zh';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            document.getElementById('langLabel').innerText = currentLang === 'zh' ? 'EN / 英文' : '中 / Chinese';
+            
+            // Update all elements with data-zh and data-en
+            const langElements = document.querySelectorAll('[data-zh]');
+            langElements.forEach(el => {
+                if (currentLang === 'en') {
+                    el.innerText = el.getAttribute('data-en') || el.innerText;
+                } else {
+                    el.innerText = el.getAttribute('data-zh') || el.innerText;
+                }
+            });
+        }
+
+        // Period Simulator Data
+        const periodsData = {
+            1: {
+                title: '範疇一與範疇二溫室氣體盤查',
+                badge: '第一期 Period 1',
+                desc: '收集營運數據，檢視範疇一（直接排放）與範疇二（能源間接排放）碳足跡，建立企業基準碳排放模型。',
+                kpi: '組織碳足跡基準值 (tCO2e)',
+                challenge: '設備監測成本與盤查精準度權衡'
+            },
+            2: {
+                title: '綠能轉型與內部碳定價',
+                badge: '第二期 Period 2',
+                desc: '評估綠電採購 (PPA) 與太陽能自建系統，引進內部碳定價機制以引導內部部門轉型。',
+                kpi: '綠電使用率 (%) 與內部碳價',
+                challenge: '資本支出 (CapEx) 與短期利潤衝擊'
+            },
+            3: {
+                title: '製程改善與低碳設備升級',
+                badge: '第三期 Period 3',
+                desc: '汰換老舊高耗能設備，導入節能技術與熱能回收系統，優化單位產品碳足跡。',
+                kpi: '單位產品碳強度 (kgCO2e/unit)',
+                challenge: '產線停機測試與升級時間成本'
+            },
+            4: {
+                title: '範疇三供應鏈減碳協同',
+                badge: '第四期 Period 4',
+                desc: '要求上下游供應商進行碳盤查，實施綠色採購策略，降低產品全生命週期碳排。',
+                kpi: '供應鏈減碳達成率 (%)',
+                challenge: '供應商合規管理與採購單價變動'
+            },
+            5: {
+                title: '高品質碳抵換與碳權購買',
+                badge: '第五期 Period 5',
+                desc: '針對無法完全消除之剩餘排放，進行國際認證碳權 (VCS/GS) 購買與碳抵換組合規劃。',
+                kpi: '剩餘排放抵換率 (%)',
+                challenge: '國際碳價波動與品質認證風險'
+            },
+            6: {
+                title: 'ESG 評級與永續財務平衡',
+                badge: '第六期 Period 6',
+                desc: '衡量碳減排成果對企業 ESG 評級與融資利率之正面效益，兼顧永續與財務穩健。',
+                kpi: '淨淨利潤 (Net Profit) 與 ESG 得分',
+                challenge: '減碳投資報酬率 (ROIC) 最佳化'
+            },
+            7: {
+                title: '最終淨零願景與績效評比',
+                badge: '第七期 Period 7',
+                desc: '彙整七期累計減碳量與總經營績效，進行初/決賽評比排名爭取榮譽與最高獎金！',
+                kpi: '總體經營與減碳綜合績效排名',
+                challenge: '淨零目標 (Net-Zero Goal) 達成率'
+            }
+        };
+
+        function setPeriod(pNum) {
+            // Update active tab buttons
+            for (let i = 1; i <= 7; i++) {
+                const btn = document.getElementById(`pTab${i}`);
+                if (i === pNum) {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-md";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50";
+                }
+            }
+
+            // Update Period Card
+            const data = periodsData[pNum];
+            document.getElementById('periodBadge').innerText = data.badge;
+            document.getElementById('periodTitle').innerText = data.title;
+            document.getElementById('periodDesc').innerText = data.desc;
+            document.getElementById('periodKpi').innerText = data.kpi;
+            document.getElementById('periodChallenge').innerText = data.challenge;
+        }
+
+        // Add to Google Calendar Helper
+        function addToCalendar(title, timeStr, location) {
+            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('企業淨零策略模擬大賽 - ' + title)}&details=${encodeURIComponent('時間：' + timeStr + ' | 地點：' + location)}&location=${encodeURIComponent(location)}`;
+            window.open(googleCalUrl, '_blank');
+        }
+
+        // FAQ Toggle Logic
+        function toggleFaq(id) {
+            const ans = document.getElementById(`faqAns${id}`);
+            const icon = document.getElementById(`faqIcon${id}`);
+            if (ans.classList.contains('hidden')) {
+                ans.classList.remove('hidden');
+                icon.className = 'fa-solid fa-chevron-up text-emerald-600';
+            } else {
+                ans.classList.add('hidden');
+                icon.className = 'fa-solid fa-chevron-down text-emerald-600';
+            }
+        }
+    </script>
+</body>
+</html>
